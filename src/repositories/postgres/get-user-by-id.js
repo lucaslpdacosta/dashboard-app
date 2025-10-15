@@ -1,12 +1,10 @@
-import { PostgresHelper } from '../../db/postgres/helper.js'
-
-export class PostgresGetUserByIdRepository {
+export class GetUserByIdUseCase {
+    constructor(getUserByIdRepository) {
+        this.getUserByIdRepository = getUserByIdRepository
+    }
     async execute(userId) {
-        const user = await PostgresHelper.query(
-            'SELECT * FROM users WHERE id = $1',
-            [userId],
-        )
+        const user = await this.getUserByIdRepository.execute(userId)
 
-        return user[0]
+        return user
     }
 }
