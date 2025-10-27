@@ -20,11 +20,8 @@ import {
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new PostgresGetUserByIdRepository()
-
     const getUserByIdUseCase = new GetUserByIdUseCase(getUserByIdRepository)
-
     const getUserByIdController = new GetUserByIdController(getUserByIdUseCase)
-
     return getUserByIdController
 }
 
@@ -45,7 +42,6 @@ export const makeCreateUserController = () => {
 export const makeUpdateUserController = () => {
     const getUserByEmailRepository = new PostgresGetUserByEmailRepository()
     const updateUserRepository = new PostgresUpdateUserRepository()
-
     const updateUserUseCase = new UpdateUserUseCase(
         getUserByEmailRepository,
         updateUserRepository,
@@ -58,10 +54,7 @@ export const makeUpdateUserController = () => {
 
 export const makeDeleteUserController = () => {
     const deleteUserRepository = new PostgresDeleteUserRepository()
-
     const deleteUserUseCase = new DeleteUserUseCase(deleteUserRepository)
-
     const deleteUserController = new DeleteUserController(deleteUserUseCase)
-
     return deleteUserController
 }
