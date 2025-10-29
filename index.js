@@ -60,8 +60,9 @@ app.get('/api/transactions', async (request, response) => {
 app.post('/api/transactions', async (request, response) => {
     const createTransactionController = makeCreateTransactionController()
 
-    const { statusCode, body } =
-        await createTransactionController.execute(request)
+    const { statusCode, body } = await createTransactionController.execute(
+        request,
+    )
 
     response.status(statusCode).send(body)
 })
