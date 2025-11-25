@@ -1,38 +1,15 @@
-import {
-    checkIfIdIsValid,
-    invalidIdResponse,
-    ok,
-    serverError,
-    transactionNotFoundResponse,
-} from '../helpers/index.js'
+import { prisma } from '../../../../prisma/prisma.js'
 
-export class DeleteTransactionController {
-    constructor(deleteTransactionUseCase) {
-        this.deleteTransactionUseCase = deleteTransactionUseCase
-    }
-
-    async execute(httpRequest) {
+export class PostgresDeleteTransactionRepository {
+    async execute(transactionId) {
         try {
-            const idIsValid = checkIfIdIsValid(httpRequest.params.transactionId)
-
-            if (!idIsValid) {
-                return invalidIdResponse()
-            }
-
-            const deletedTransaction =
-                await this.deleteTransactionUseCase.execute(
-                    httpRequest.params.transactionId,
-                )
-
-            if (!deletedTransaction) {
-                return transactionNotFoundResponse()
-            }
-
-            return ok(deletedTransaction)
+            await prisma.transaction.delete({
+                where: {
+                    id: transactionId,
+                },
+            })
         } catch (error) {
-            console.error(error)
-
-            return serverError()
+            return null
         }
     }
 }
