@@ -1,15 +1,11 @@
 import { prisma } from '../../../../prisma/prisma.js'
 
-export class PostgresDeleteUserRepository {
+export class PostgresGetUserByIdRepository {
     async execute(userId) {
-        try {
-            return await prisma.user.delete({
-                where: {
-                    id: userId,
-                },
-            })
-        } catch (error) {
-            return null
-        }
+        return await prisma.user.findUnique({
+            where: {
+                id: userId,
+            },
+        })
     }
 }
