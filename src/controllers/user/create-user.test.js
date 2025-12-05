@@ -13,10 +13,10 @@ describe('Create User Controller', () => {
 
         const httpRequest = {
             body: {
-                first_name: 'first',
-                last_name: 'last',
-                email: 'email@email.com',
-                password: 'password',
+                first_name: 'Felipe',
+                last_name: 'Rocha',
+                email: 'fe@rocha.com',
+                password: '1234567',
             },
         }
 
@@ -24,5 +24,20 @@ describe('Create User Controller', () => {
 
         expect(result.statusCode).toBe(201)
         expect(result.body).toBe(httpRequest.body)
+    })
+
+    it('should return 400 if first_name is not provided', async () => {
+        const createUserUseCase = new CreateUserUseCaseStub()
+        const createUserController = new CreateUserController(createUserUseCase)
+        const httpRequest = {
+            body: {
+                last_name: 'Rocha',
+                email: 'fe@rocha.com',
+                password: '1234567',
+            },
+        }
+
+        const result = await createUserController.execute(httpRequest)
+        expect(result.statusCode).toBe(400)
     })
 })
