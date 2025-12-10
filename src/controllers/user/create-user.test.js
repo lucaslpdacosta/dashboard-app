@@ -21,7 +21,6 @@ describe('Create User Controller', () => {
         }
 
         const result = await createUserController.execute(httpRequest)
-
         expect(result.statusCode).toBe(201)
         expect(result.body).toBe(httpRequest.body)
     })
@@ -32,7 +31,7 @@ describe('Create User Controller', () => {
         const httpRequest = {
             body: {
                 last_name: 'last_name',
-                email: 'email',
+                email: 'email@email.com',
                 password: 'password',
             },
         }
@@ -92,9 +91,25 @@ describe('Create User Controller', () => {
         const createUserController = new CreateUserController(createUserUseCase)
         const httpRequest = {
             body: {
-                first_name: 'Felipe',
-                last_name: 'Rocha',
-                email: 'fe@rocha.com',
+                first_name: 'first_name',
+                last_name: 'last_name',
+                email: 'email@email.com',
+            },
+        }
+
+        const result = await createUserController.execute(httpRequest)
+        expect(result.statusCode).toBe(400)
+    })
+
+    it('should return 400 if password is less than 6 characters', async () => {
+        const createUserUseCase = new CreateUserUseCaseStub()
+        const createUserController = new CreateUserController(createUserUseCase)
+        const httpRequest = {
+            body: {
+                first_name: 'first_name',
+                last_name: 'last_name',
+                email: 'email@email.com',
+                password: 'passw',
             },
         }
 
