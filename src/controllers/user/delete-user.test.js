@@ -44,7 +44,15 @@ describe('DeleteUserController', () => {
         const { sut, deleteUserUseCase } = makeSut()
         jest.spyOn(deleteUserUseCase, 'execute').mockReturnValueOnce(null)
         const result = await sut.execute(httpRequest)
-
         expect(result.statusCode).toBe(404)
+    })
+
+    it('should return 500 if DeleteUserUseCase throws', async () => {
+        const { sut, deleteUserUseCase } = makeSut()
+        jest.spyOn(deleteUserUseCase, 'execute').mockImplementationOnce(() => {
+            throw new Error()
+        })
+        const result = await sut.execute(httpRequest)
+        expect(result.statusCode).toBe(500)
     })
 })
