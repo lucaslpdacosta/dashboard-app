@@ -24,11 +24,20 @@ describe('GetUserByIdController', () => {
     }
 
     it('should return 200 if a user is found', async () => {
-    
         const { sut } = makeSut()
         const result = await sut.execute({
             params: { userId: faker.string.uuid() },
         })
         expect(result.statusCode).toBe(200)
+    })
+
+    it('should return 400 if an invalid id is provided', async () => {
+        const { sut } = makeSut()
+        const result = await sut.execute({
+            params: {
+                userId: 'invalid_id',
+            },
+        })
+        expect(result.statusCode).toBe(400)
     })
 })
