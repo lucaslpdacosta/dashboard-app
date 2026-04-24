@@ -87,4 +87,15 @@ describe('GetTransactionsByUserIdUseCase', () => {
         const promise = sut.execute(id)
         await expect(promise).rejects.toThrow()
     })
+
+    it('should throw if GetTransactionsByUserIdRepository throws', async () => {
+        const { sut, getTransactionsByUserIdRepository } = makeSut()
+        jest.spyOn(
+            getTransactionsByUserIdRepository,
+            'execute',
+        ).mockRejectedValueOnce(new Error())
+        const id = faker.string.uuid()
+        const promise = sut.execute(id)
+        await expect(promise).rejects.toThrow()
+    })
 })
