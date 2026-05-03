@@ -1,8 +1,13 @@
 import { EmailAlreadyInUseError } from '../../errors/user'
 import { CreateUserUseCase } from './create-user'
-import { faker } from '@faker-js/faker'
+import { user as fixtureUser } from '../../tests'
 
 describe('Create User Use Case', () => {
+    const user = {
+        ...fixtureUser,
+        id: undefined,
+    }
+
     class GetUserByEmailRepositoryStub {
         async execute() {
             return null
@@ -25,15 +30,6 @@ describe('Create User Use Case', () => {
         execute() {
             return 'generated_id'
         }
-    }
-
-    const user = {
-        first_name: faker.person.firstName(),
-        last_name: faker.person.lastName(),
-        email: faker.internet.email(),
-        password: faker.internet.password({
-            length: 7,
-        }),
     }
 
     const makeSut = () => {
@@ -104,5 +100,41 @@ describe('Create User Use Case', () => {
             password: 'hashed_password',
             id: 'generated_id',
         })
+    })
+
+    it('should throw if GetUserByEmailRepository throws', async () => {
+        const { sut, getUserByEmailRepository } = makeSut()
+        jest.spyOn(getUserByEmailRepository, 'execute').mockRejectedValueOnce(
+            new Error(),
+        )
+        const promise = sut.execute(user)
+        await expect(promise).rejects.toThrow()
+    })
+
+    it('should throw if IdGeneratorAdapter throws', async () => {
+        const { sut, idGeneratorAdapter } = makeSut()
+        jest.spyOn(idGeneratorAdapter, 'execute').mockImplementationOnce(() => {
+            throw new Error()
+        })
+        const promise = sut.execute(user)
+        await expect(promise).rejects.toThrow()
+    })
+
+    it('should throw if PasswordHasherAdapter throws', async () => {
+        const { sut, passwordHasherAdapter } = makeSut()
+        jest.spyOn(passwordHasherAdapter, 'execute').mockRejectedValueOnce(
+            new Error(),
+        )
+        const promise = sut.execute(user)
+        await expect(promise).rejects.toThrow()
+    })
+
+    it('should throw if CreateUserRepository throws', async () => {
+        const { sut, createUserRepository } = makeSut()
+        jest.spyOn(createUserRepository, 'execute').mockRejectedValueOnce(
+            new Error(),
+        )
+        const promise = sut.execute(user)
+        await expect(promise).rejects.toThrow()
     })
 })
