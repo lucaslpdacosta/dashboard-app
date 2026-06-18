@@ -3,7 +3,7 @@ import { prisma } from '../../../../prisma/prisma.js'
 export class PostgresDeleteTransactionRepository {
     async execute(transactionId) {
         try {
-            await prisma.transaction.delete({
+            return prisma.transaction.delete({
                 where: {
                     id: transactionId,
                 },
