@@ -5,7 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "test": "jest --passWithNoTests --silent",
+        "test": "dotenv -e .env.test -- jest --passWithNoTests --silent --runInBand --detectOpenHandles --forceExit",
         "test:watch": "jest --watch --passWithNoTests --silent",
         "test:coverage": "jest --passWithNoTests --silent --coverage",
         "postinstall": "npx husky install && npx prisma generate",
@@ -29,7 +29,8 @@
         "jest": "^29.7.0",
         "lint-staged": "^13.2.3",
         "prettier": "^3.2.5",
-        "prisma": "^5.7.0"
+        "prisma": "^5.7.0",
+        "supertest": "^6.3.4"
     },
     "dependencies": {
         "@prisma/client": "^5.7.0",
