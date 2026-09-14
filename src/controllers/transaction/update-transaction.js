@@ -6,7 +6,9 @@ import {
     serverError,
     ok,
     badRequest,
+    transactionNotFoundResponse,
 } from '../helpers/index.js'
+import { TransactionNotFoundError } from '../../errors/transaction.js'
 
 export class UpdateTransactionController {
     constructor(updateTransactionUseCase) {
@@ -21,9 +23,7 @@ export class UpdateTransactionController {
             }
 
             const params = httpRequest.body
-
             await updateTransactionSchema.parseAsync(params)
-
             const transaction = await this.updateTransactionUseCase.execute(
                 httpRequest.params.transactionId,
                 params,
@@ -37,8 +37,11 @@ export class UpdateTransactionController {
                 })
             }
 
-            console.error(error)
+            if (error instanceof TransactionNotFoundError) {
+                return transactionNotFoundResponse()
+            }
 
+            console.error(error)
             return serverError()
         }
     }
