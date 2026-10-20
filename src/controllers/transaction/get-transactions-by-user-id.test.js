@@ -9,7 +9,7 @@ describe('Get Transaction By User ID Controller', () => {
             return [transaction]
         }
     }
-    
+
     const makeSut = () => {
         const getUserByIdUseCase = new GetUserByIdUseCaseStub()
         const sut = new GetTransactionsByUserIdController(getUserByIdUseCase)
