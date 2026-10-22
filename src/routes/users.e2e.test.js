@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { app } from '../app.js'
+import { app } from '../app.cjs'
 import { user } from '../tests/fixtures/user.js'
 import { faker } from '@faker-js/faker'
 import { TransactionType } from '@prisma/client'
@@ -25,6 +25,7 @@ describe('User Routes E2E Tests', () => {
             })
 
         const response = await request(app).get(`/api/users/${createdUser.id}`)
+
         expect(response.status).toBe(200)
         expect(response.body).toEqual(createdUser)
     })
@@ -120,6 +121,7 @@ describe('User Routes E2E Tests', () => {
         const response = await request(app).get(
             `/api/users/${faker.string.uuid()}`,
         )
+
         expect(response.status).toBe(404)
     })
 
@@ -127,6 +129,7 @@ describe('User Routes E2E Tests', () => {
         const response = await request(app).get(
             `/api/users/${faker.string.uuid()}`,
         )
+
         expect(response.status).toBe(404)
     })
 
@@ -139,6 +142,7 @@ describe('User Routes E2E Tests', () => {
                 email: faker.internet.email(),
                 password: faker.internet.password(),
             })
+
         expect(response.status).toBe(404)
     })
 
